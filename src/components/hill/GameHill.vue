@@ -1,31 +1,24 @@
 <template>
-	
-	<el-row>
-	<h3 class="text-center text-primary">游戏大厅</h3>
-	<el-col :span="6">
-	<levelnav/>
-	</el-col>
-	<el-col :span="18">
-	<roomlist/>
-	</el-col>
-</el-row>
-
-
+	<el-row style="margin-bottom: 18px">
+			<el-col :span='3'>&nbsp;</el-col>
+			<el-col :span='3'>
+				<levelnav/>
+			</el-col>
+			<el-col :span='15'>
+				<roomlist/>
+			</el-col>
+			<el-col :span='3'>&nbsp;</el-col>
+	</el-row>
+		
+		
 </template>
 <script>
-import {getRoomList} from '../../vuex/actions/HallAction'
-import RoomList from './RoomList.vue';
-import Levelnav from './Levelnav.vue';
+import Levelnav from './Levelnav'
+import RoomList from './RoomList'
 	export default {
-		mounted:function(){ 
-       		//axios向服务器发请求,获取房间列表
-       		getRoomList(this,$('#roompwd').val());
-  		},
-
   		components:{
   			levelnav:Levelnav,
   			roomlist:RoomList
-
   		}
 	}
 </script>
