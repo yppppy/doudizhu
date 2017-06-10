@@ -32,27 +32,30 @@
 		      prop="createtime"
 		      label="创建时间">
 		    </el-table-column>
-		    <el-table-column
-		      fixed="right"
-		      label="操作">
-		      <template scope="scope">
-		        <el-button
+		 <el-table-column inline-template
+        fixed="right"
+            label="操作"
+              width="150">
+		        <el-button @click="enterRoom(row)"
 		          type="text"
-		          size="small">
+		          size="small"  >
 		          进入
 		        </el-button>
-		      </template>
+		     
 		    </el-table-column>
 		  </el-table>
 
 	</div>
 </template>
 <script>
+import {axGet} from '../../common/HttpBean'
 import {newRoom,getRoomList} from '../../vuex/actions/HallAction'
 let newVue =  {
   data(){
   	return {
-  		roomList:[]
+  		roomList:[],
+  		loginbean:{},
+  		rpwd:""
   	}
   },
   mounted:function(){ 
@@ -67,10 +70,47 @@ let newVue =  {
   		$(newRoomForm).hide();
   	},
   	newRoom:function(){
-  		let formObj='roompwd='+newRoomForm.roompwd.value;
+  		let formObj=newRoomForm.roompwd.value;
   		newRoom(formObj,this);
-  	}
-  }
+  	},
+  	enterRoom:function(rowa){
+           //获取房间号后把它加入到loginbean中
+  		    //组合好参数跳进room
+  		    if(rowa.pwd=="有"){
+  		    let	pwd = prompt("请输入房间密码:");
+  		  
+  		
+  			if (pwd != null){
+  		    	
+               let thisa=this;
+       //从服务器获取密码
+          axGet('/api/hall/getPwdByRoom?room='+rowa.room,{},function(res){
+			
+	           thisa.rpwd=res.data;
+	           if(pwd==thisa.rpwd){//密码输入正确，进入房间
+	           	   this.loginbean.room=rowa.room
+  		    	  this.$router.push({ path: '/room', query:this.loginbean});
+	           }else{
+               	alert("密码输入错误！！！！")
+               }
+ 
+	          },function(err){
+		     alert(err);
+            });  
+
+               }else{//输入的密码为空
+               	alert("输入的密码不能为空！！！！")
+               }
+                
+            }else{//无密码，直接进入房间
+
+             this.loginbean.room=rowa.room
+  		
+  		 this.$router.push({ path: '/room', query:this.loginbean});
+            }
+  		    },
+  	 			 
+  },
 }
 export default newVue;
 </script>
