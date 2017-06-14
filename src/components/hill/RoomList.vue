@@ -50,11 +50,12 @@
 <script>
 import {axGet} from '../../common/HttpBean'
 import {newRoom,getRoomList} from '../../vuex/actions/HallAction'
+import userStore from '../../vuex/stores/UserStore'
 let newVue =  {
   data(){
   	return {
   		roomList:[],
-  		loginbean:{},
+  		//loginbean:{},
   		rpwd:""
   	}
   },
@@ -62,6 +63,7 @@ let newVue =  {
 		//axios向服务器发请求,获取房间列表
 		getRoomList(this);
   },
+
   methods:{
   	openNewRoom:function(){
   		$(newRoomForm).show();
@@ -77,36 +79,39 @@ let newVue =  {
            //获取房间号后把它加入到loginbean中
   		    //组合好参数跳进room
   		    if(rowa.pwd=="有"){
-  		    let	pwd = prompt("请输入房间密码:");
+  		    let	pwd = prompt("请输入房间密码:");//对话框点击取消返回null，不做任何操作
   		  
   		
-  			if (pwd != null){
-  		    	
+  			if (pwd != null){//点击了确定
+  		    	 
+  		    	 if(pwd==""){//没输入
+                      alert("输入密码不能为空！！！！")
+  		    	 }else{
                let thisa=this;
-       //从服务器获取密码
+       //从服务器获取密码[方法内this指针发生转移]
           axGet('/api/hall/getPwdByRoom?room='+rowa.room,{},function(res){
 			
 	           thisa.rpwd=res.data;
 	           if(pwd==thisa.rpwd){//密码输入正确，进入房间
-	           	   this.loginbean.room=rowa.room
-  		    	  this.$router.push({ path: '/room', query:this.loginbean});
+	             let msg=userStore.state.loginbean
+	           	  msg.room=rowa.room
+  		    	  thisa.$router.push({ path: '/room', query:msg});
 	           }else{
                	alert("密码输入错误！！！！")
                }
  
 	          },function(err){
 		     alert(err);
-            });  
+            });
 
-               }else{//输入的密码为空
-               	alert("输入的密码不能为空！！！！")
+         }//end of else
                }
                 
             }else{//无密码，直接进入房间
 
-             this.loginbean.room=rowa.room
-  		
-  		 this.$router.push({ path: '/room', query:this.loginbean});
+            let msg=userStore.state.loginbean
+	           	  msg.room=rowa.room
+  		    	  thisa.$router.push({ path: '/room', query:msg});
             }
   		    },
   	 			 

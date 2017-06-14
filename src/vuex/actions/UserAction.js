@@ -3,12 +3,12 @@ import userStore from '../stores/UserStore'
 
 export function zhuce(form,thisa){
 		axPost('/api/users/zhuce',$(form).serialize(),function(res){
-				//alert(res.data);
-				if(res.data==1){
+				if(res.data!=0){
+					userStore.commit('zhuce',res.data);
 					thisa.$router.push('/gamehill');
 					return;
 				}
-				userStore.commit('zhuce',res.data);
+				
 			},function(err){
 				alert(err);
 		});
@@ -16,7 +16,8 @@ export function zhuce(form,thisa){
 
 export function login(form,thisa){
 		axPost('/api/users/login',$(form).serialize(),function(res){
-				if(res.data==1){
+				if(res.data!=0){
+					userStore.commit('login',res.data);
 					thisa.$router.push('/gamehill');
 					return;
 				}else{

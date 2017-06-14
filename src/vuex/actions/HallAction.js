@@ -4,8 +4,9 @@ export function getRoomList(thisa){
 		axGet('/api/hall/getRoomList',{},function(res){
 			//console.log(res.data[1]);
 	       //alert(res.data[1].nicheng);
-	thisa.roomList=res.data[0];
-	thisa.loginbean=res.data[1];
+	   // thisa.roomList=res.data[0];
+	   // thisa.loginbean=res.data[1];
+	  thisa.roomList=res.data;
 	},function(err){
 		alert(err);
 });
