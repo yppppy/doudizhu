@@ -76,6 +76,8 @@ let newVue =  {
   		newRoom(formObj,this);
   	},
   	enterRoom:function(rowa){
+
+
            //获取房间号后把它加入到loginbean中
   		    //组合好参数跳进room
   		    if(rowa.pwd=="有"){
@@ -94,7 +96,7 @@ let newVue =  {
 	           thisa.rpwd=res.data;
 	           if(pwd==thisa.rpwd){//密码输入正确，进入房间
 	             let msg=userStore.state.loginbean
-	           	  msg.room=rowa.room
+	           	  msg.room=rowa.room;
   		    	  thisa.$router.push({ path: '/room', query:msg});
 	           }else{
                	alert("密码输入错误！！！！")
@@ -108,10 +110,13 @@ let newVue =  {
                }
                 
             }else{//无密码，直接进入房间
-
+            
             let msg=userStore.state.loginbean
-	           	  msg.room=rowa.room
-  		    	  thisa.$router.push({ path: '/room', query:msg});
+           
+            alert(userStore.state.loginbean);
+	           	  msg.room=rowa.room;
+	           this.$router.push({ path: '/room', query:msg});
+  		    	    
             }
   		    },
   	 			 

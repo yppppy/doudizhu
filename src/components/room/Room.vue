@@ -24,16 +24,25 @@ export default {
         // pomelo.request("connector.entryHandler.entry", {uid:3,uname:'zhangsan'}, function(data) {
         //     alert(data.name);
         //   });
-          pomelo.on('enterRoom', function(data){
-              let len = data.length;
-              for(let i=0;i<len;i++){
-                self.$refs.roomready.setSeat(i,data[i].nicheng);
+          pomelo.on('enterRoom', function(seat){
+          //此方法一触发就意味着房间人员发生了变化，先把房间座位上的人清空，再根据新的数据排座位
+              for(let i=0;i<3;i++){
+                self.$refs.roomready.setSeat(i,'');
+              }
+              for(let key in seat){
+                self.$refs.roomready.setSeat(key,seat[key].nicheng);
               }
               
             });
+          //-----------------------------------------
           pomelo.on('fullRoom', function(data){
               alert('客满');
-              self.$router.push('/hill');
+              self.$router.push('/gamehill');
+            });
+          //------------被动离开------------------
+          pomelo.on('leave', function(data){
+              alert(data);
+              self.$router.push('/');
             });
         });
   }
