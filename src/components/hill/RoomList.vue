@@ -55,7 +55,7 @@ let newVue =  {
   data(){
   	return {
   		roomList:[],
-  		//loginbean:{},
+  		loginbean:{},
   		rpwd:""
   	}
   },
@@ -111,11 +111,12 @@ let newVue =  {
                 
             }else{//无密码，直接进入房间
             
-            let msg=userStore.state.loginbean
+            //let msg=userStore.state.loginbean
            
-            alert(userStore.state.loginbean);
-	           	  msg.room=rowa.room;
-	           this.$router.push({ path: '/room', query:msg});
+            //alert(userStore.state.loginbean);
+           // alert(this.loginbean);
+	           	 this.loginbean.room=rowa.room;
+	            this.$router.push({ path: '/room', query:this.loginbean});
   		    	    
             }
   		    },

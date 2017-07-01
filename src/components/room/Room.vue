@@ -7,46 +7,12 @@
 <script>
 import RoomHead from './RoomHead'
 import RoomReady from './RoomReady'
+import SocketBean from '../../common/SocketBean'
 export default {
   mounted(){
     let uobj = this.$route.query;
     let self = this;
-    let pomelo = window.pomelo;
-      let host = "127.0.0.1";
-      let port = "3010";
-      function show() {
-        pomelo.init({
-          host: host,
-          port: port,
-          log: true
-        }, function() {
-          pomelo.notify('connector.roomHandler.enterRoom',uobj);
-        // pomelo.request("connector.entryHandler.entry", {uid:3,uname:'zhangsan'}, function(data) {
-        //     alert(data.name);
-        //   });
-          pomelo.on('enterRoom', function(seat){
-          //此方法一触发就意味着房间人员发生了变化，先把房间座位上的人清空，再根据新的数据排座位
-              for(let i=0;i<3;i++){
-                self.$refs.roomready.setSeat(i,'');
-              }
-              for(let key in seat){
-                self.$refs.roomready.setSeat(key,seat[key].nicheng);
-              }
-              
-            });
-          //-----------------------------------------
-          pomelo.on('fullRoom', function(data){
-              alert('客满');
-              self.$router.push('/gamehill');
-            });
-          //------------被动离开------------------
-          pomelo.on('leave', function(data){
-              alert(data);
-              self.$router.push('/');
-            });
-        });
-  }
-  show();
+    SocketBean.getSingleTon().init(uobj,self);
   },
   components:{
     roomhead:RoomHead,
